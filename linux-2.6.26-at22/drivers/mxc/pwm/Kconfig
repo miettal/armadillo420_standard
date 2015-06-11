@@ -1,0 +1,31 @@
+#
+# i.MX PWM devices
+#
+
+menu "MXC PWM support"
+
+config MXC_PWM
+	bool "Enable PWM driver"
+	depends on ARCH_MXC
+	select HAVE_PWM
+	help
+	  Enable support for the i.MX PWM controller(s).
+
+config MXC_PWM_DEBUG
+	bool "MXC PWM debuggind messages"
+	depends on ARCH_MXC
+	default n
+	help
+	  Say Y here if you want the MXC PWM driver to produce a bunch of debug
+	  messages to the system log.
+
+config MXC_PWM_CLASS
+	bool "MXC PWM class support"
+	depends on MXC_PWM
+        default y
+	help
+	  This option enables the mxc pwm sysfs class in
+	  /sys/class/mxc_pwm.  You'll need this to do anything useful
+	  with PWMs.  If unsure, say N.
+
+endmenu

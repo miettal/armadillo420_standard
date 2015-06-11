@@ -1,0 +1,23 @@
+#!/bin/sh
+
+PATH=/bin:/sbin:/usr/bin:/usr/sbin
+
+. /etc/init.d/functions
+
+echo -n "Configure /home/ftp: "
+[ -f /home/ftp/bin/ls ] || (
+	ln /bin/busybox /home/ftp/bin/ls &&
+	ln /lib/libm-2.11.2.so /home/ftp/lib/libm.so.6 &&
+	ln /lib/libcrypt-2.11.2.so /home/ftp/lib/libcrypt.so.1 &&
+	ln /lib/libc-2.11.2.so /home/ftp/lib/libc.so.6 &&
+	ln /lib/libgcc_s.so.1 /home/ftp/lib/libgcc_s.so.1 &&
+	ln /lib/ld-2.11.2.so /home/ftp/lib/ld-linux.so.3 &&
+	ln /etc/group /home/ftp/etc/group &&
+	ln /etc/passwd /home/ftp/etc/passwd &&
+	chmod 511 /home/ftp/bin &&
+	chmod 511 /home/ftp/lib &&
+	chmod 511 /home/ftp/etc &&
+	chmod 777 /home/ftp/pub &&
+	true)
+
+check_status

@@ -1,0 +1,43 @@
+#!/bin/expect
+
+source /usr/share/3g/3g-function.exp
+log_user 0
+
+if { $argc < 6 } {
+	puts "usage: $argv0 \[pid\] \[apn\] \[user\] \[passwd\] \[auth_type\] \[pdp_type\]"
+	exit 1
+}
+
+set pid [lindex $argv 0]
+set apn [lindex $argv 1]
+set user [lindex $argv 2]
+set passwd [lindex $argv 3]
+set auth_type [lindex $argv 4]
+set pdp_type [lindex $argv 5]
+
+serial_connect 10
+busy_wait 10
+
+puts "set RAT"
+send_command "AT!SELRAT=01"
+check_status 2
+puts "success"
+
+puts "set SELMODE"
+send_command "AT!SELMODE=02"
+check_status 2
+puts "success"
+
+puts "set APN"
+set command "AT+CGDCONT=$pid,\"$pdp_type\",\"$apn\""
+send_command "$command"
+check_status 3
+puts "success"
+
+puts "set user/passwd"
+set command "AT\$QCPDPP=$pid,$auth_type,\"$passwd\",\"$user\""
+send_command "$command"
+check_status 3
+puts "success"
+
+exit 

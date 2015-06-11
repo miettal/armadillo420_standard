@@ -1,0 +1,57 @@
+#!/bin/expect
+
+proc serial_connect {wait_time} {
+	global spawn_id
+
+	spawn tip -s 115200 -l /dev/ttyUSB3 -c -f
+	set timeout $wait_time
+	expect {
+		"Connected." {
+			return 0
+		} timeout {
+			puts "3G serial connect timeout!"
+		}
+	}
+
+	exit 1
+}
+
+proc send_command {str} {
+	set timeout 1
+
+	for {set li 0} {$li < 5} {incr li} {
+		send "$str\r"
+		expect "$str" {
+			return 0
+		}
+	}
+
+	puts "ERRORCMD: $str";
+	exit 1
+}
+
+proc busy_wait {try} {
+	set timeout 1
+	for {set i 0} {$i < $try} {incr i} {
+		send_command "AT"
+		expect "OK" {
+			return 0
+		}
+	}
+	puts "3G: busy wait timeout!"
+	exit 1
+}
+
+proc check_status {time} {
+	set timeout $time
+	expect {
+		"OK" {
+			return 0
+		} "ERROR" {
+			puts "error"
+		} timeout {
+			puts "timeout"
+		}
+	}
+	exit 1
+}

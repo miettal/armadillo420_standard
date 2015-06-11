@@ -1,0 +1,13 @@
+.deps
+.version
+Makefile
+
+.warning
+config.h
+config.log
+config.status
+stamp-h
+stamp-h1
+
+
+

@@ -1,0 +1,45 @@
+wget http://armadillo.atmark-techno.com/files/downloads/armadillo-420/source/kernel/linux-2.6.26-at22.tar.gz
+wget http://armadillo.atmark-techno.com/files/downloads/armadillo-420/source/dist/atmark-dist-20150127.tar.gz
+tar zxvf linux-2.6.26-at22.tar.gz
+tar zxvf atmark-dist-20150127.tar.gz
+
+ln -s atmark-dist-20150127 atmark-dist
+cd atmark-dist
+ln -s ../linux-2.6.26-at22 linux-2.6.x
+
+make config
+  config/mkconfig > config.in
+  * Vendor/Product Selection
+  *
+  * Select the Vendor you wish to target
+  *
+  Vendor (3com, ..., Arnewsh, AtmarkTechno, Atmel, ..., senTec)
+[AtmarkTechno] AtmarkTechno
+  *
+  * Select the Product you wish to target
+  *
+  AtmarkTechno Products (Armadillo-210.Base, ..., Armadillo-300,
+Armadillo-420, Armadillo-420.WLAN-AWL12, ..., SUZAKU-V.SZ410-SIV)
+[Armadillo-420] Armadillo-420
+  *
+  * Kernel/Library/Defaults Selection
+  *
+  * Kernel is linux-2.6.x
+  *
+  Cross-dev (default, arm, armel) [default] default
+  Libc Version (None, glibc, uC-libc, uClibc) [None] None
+    defined CONFIG_DEFAULTS_LIBC_NONE
+  Customize Kernel Settings (CONFIG_DEFAULTS_KERNEL) [N/y/?] n
+  Customize Vendor/User Settings (CONFIG_DEFAULTS_VENDOR) [N/y/?] n
+  Update Default Vendor Settings (CONFIG_DEFAULTS_VENDOR_UPDATE) [N/y/?] n
+
+make dep all #config, kernel and userland
+make # kernel and userland
+make romfs; make image #userland
+make linux; make image #kernel
+
+sudo cp images/linux.bin.gz /var/lib/tftpboot/
+sudo cp images/romfs.img.gz /var/lib/tftpboot/
+
+picocom --baud=115200 /dev/ttyUSB0
+hermit> tftpdl 192.168.1.110 192.168.1.109 --kernel=linux.bin.gz --userland=romfs.img.gz

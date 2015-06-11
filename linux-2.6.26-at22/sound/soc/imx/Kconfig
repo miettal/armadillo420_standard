@@ -1,0 +1,55 @@
+config SND_MXC_SOC
+	tristate "SoC Audio for the Freescale i.MX CPU"
+	depends on ARCH_MXC && SND
+	select SND_PCM
+	help
+	  Say Y or M if you want to add support for codecs attached to
+	  the MXC AC97, I2S or SSP interface. You will also need
+	  to select the audio interfaces to support below.
+
+config SND_MXC_AC97
+	tristate
+	select SND_AC97_CODEC
+
+config SND_MXC_SOC_AC97
+	tristate
+	select AC97_BUS
+
+config SND_MXC_SOC_SSI
+	tristate
+
+config SND_SOC_IMX31ADS_WM8753
+	tristate "SoC Audio support for MX31 - WM8753"
+	depends on SND_MXC_SOC && ARCH_MX3
+	select SND_MXC_SOC_SSI
+	select SND_SOC_WM8753
+	help
+	  Say Y if you want to add support for SoC audio on MX31ADS
+	  with the WM8753.
+
+config SND_SOC_IMX32ADS_WM8350
+	tristate "SoC Audio support for MX31 - WM8350"
+	depends on SND_MXC_SOC && ARCH_MX3 && REGULATOR_WM8350
+	select SND_MXC_SOC_SSI
+	select SND_SOC_WM8350
+	help
+	  Say Y if you want to add support for SoC audio on MX32ADS
+	  with the WM8350.
+
+config SND_SOC_ARMADILLO500FX_WM8978
+	tristate "SoC Audio support for Armadillo-500 FX - WM8978"
+	depends on SND_MXC_SOC && ARCH_MX3
+	select SND_MXC_SOC_SSI
+	select SND_SOC_WM8978
+	help
+	  Say Y if you want to add support for SoC audio on Armadillo-500 FX
+	  with the WM8978.
+
+config SND_SOC_ARMADILLO440_WM8978
+	tristate "SoC Audio support for Armadillo-440 - WM8978"
+	depends on ARCH_MX25 && (ARMADILLO400_AUD5_CON11 || ARMADILLO400_AUD6_CON9)
+	select SND_MXC_SOC_SSI
+	select SND_SOC_WM8978
+	help
+	  Say Y if you want to add support for SoC audio on Armadillo-440
+	  with the WM8978.

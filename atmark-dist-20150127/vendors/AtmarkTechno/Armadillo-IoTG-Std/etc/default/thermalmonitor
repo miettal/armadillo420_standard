@@ -1,0 +1,15 @@
+#!/bin/sh
+
+HOT_TEMP_MDEG=75000
+HOT_TEMP_CMD='/etc/config/hot_temp_action'
+HOT_TEMP_CMD_ARGS=''
+
+PASSIVE_TEMP_MDEG=70000
+PASSIVE_TEMP_CMD='/etc/config/passive_temp_action'
+PASSIVE_TEMP_CMD_ARGS=''
+
+while true
+do
+	thermaltrigger -a $HOT_TEMP_MDEG $HOT_TEMP_CMD $HOT_TEMP_CMD_ARGS
+	thermaltrigger -b $PASSIVE_TEMP_MDEG $PASSIVE_TEMP_CMD $PASSIVE_TEMP_CMD_ARGS
+done

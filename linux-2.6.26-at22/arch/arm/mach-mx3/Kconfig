@@ -1,0 +1,128 @@
+menu "MX3 Options"
+	depends on ARCH_MX3
+
+choice
+	prompt "Platform"
+	depends on ARCH_MX3
+	default MACH_MX31ADS
+
+config MACH_ARMADILLO500
+	bool "Armadillo-500 (Development Base Board)"
+
+config MACH_ARMADILLO500FX
+	bool "Armadillo-500 FX"
+
+config MACH_MX31ADS
+	bool "MX31ADS"
+	help
+	  Include support for MX31ADS platform. This includes specific
+	  configurations for the board and its peripherals.
+
+endchoice
+
+config MX3_DOZE_DURING_IDLE
+	bool "Enter Doze mode during idle"
+	help
+	  Turning on this option will put the CPU into Doze mode during idle.
+	  The default is to enter Wait mode during idle. Doze mode during
+	  idle will save additional power over Wait mode.
+
+config MXC_SDMA_API
+        bool "Use SDMA API"
+        default y
+        help
+           This selects the Freescale MXC SDMA API.
+           If unsure, say N.
+
+config ARCH_MXC_HAS_NFC_V1
+        bool "MXC NFC Hardware Version 1"
+	depends on !(MACH_MX31ADS && XIP_KERNEL)
+        default y
+        help
+           This selects the Freescale MXC Nand Flash Controller Hardware Version 1
+           If unsure, say N.
+
+config ARCH_MXC_HAS_NFC_V2
+        bool "MXC NFC Hardware Version 2"
+	depends on !(MACH_MX31ADS && XIP_KERNEL)
+        default y
+        help
+           This selects the Freescale MXC Nand Flash Controller Hardware Version 2
+           If unsure, say N.
+
+menu "Device options"
+
+config I2C_MXC_SELECT1
+	bool "Enable I2C1 module"
+	default y
+	depends on I2C_MXC
+	help
+	  Enable MX31 I2C1 module.
+
+config I2C_MXC_SELECT2
+	bool "Enable I2C2 module"
+	default n
+	depends on I2C_MXC
+	help
+	  Enable MX31 I2C2 module.
+
+config I2C_MXC_SELECT3
+	bool "Enable I2C3 module"
+	default n
+	depends on I2C_MXC
+	help
+	  Enable MX31 I2C3 module.
+
+config SDHC_MXC_SELECT1
+	bool "Enable SDHC1 module"
+	default y
+	depends on MMC_MXC
+	help
+	  Enable MX31 SDHC1 module.
+
+config SDHC_MXC_SELECT2
+	bool "Enable SDHC2 module"
+	default n
+	depends on MMC_MXC
+	help
+	  Enable MX31 SDHC2 module.
+
+config SERIAL_MXC_PORT1
+	bool "Enable UART port 1"
+	default y
+	depends on SERIAL_MXC
+	help
+	  Enable MX31 UART port 1.
+
+config SERIAL_MXC_PORT2
+	bool "Enable UART port 2"
+	default n
+	depends on SERIAL_MXC
+	help
+	  Enable MX31 UART port 2.
+
+config SERIAL_MXC_PORT3
+	bool "Enable UART port 3"
+	default n
+	depends on SERIAL_MXC
+	help
+	  Enable MX31 UART port 3.
+
+config SERIAL_MXC_PORT4
+	bool "Enable UART port 4"
+	default n
+	depends on SERIAL_MXC
+	help
+	  Enable MX31 UART port 4.
+
+config SERIAL_MXC_PORT5
+	bool "Enable UART port 5"
+	default n
+	depends on SERIAL_MXC
+	help
+	  Enable MX31 UART port 5.
+
+endmenu
+
+endmenu
+

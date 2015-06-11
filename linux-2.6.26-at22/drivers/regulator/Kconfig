@@ -1,0 +1,34 @@
+menu "Voltage and Current regulators"
+
+config REGULATOR_API
+	bool
+
+config REGULATOR
+	tristate "Voltage and Current Regulator Support"
+	depends on EXPERIMENTAL
+	select REGULATOR_API
+	default n
+	help
+	  Generic Voltage and Current Regulator support.
+
+config REGULATOR_DEBUG
+	bool "Regulator debug support"
+	depends on REGULATOR
+	help
+	  Say yes here to enable debugging support.
+
+config REGULATOR_FIXED_VOLTAGE
+	tristate "Fixed voltage regulator support"
+	depends on REGULATOR
+	help
+	  This driver provides support for fixed voltage regulators,
+	  useful for systems which use a combination of software
+	  managed regulators and simple non-configurable regulators.
+
+config REGULATOR_MC34704
+	tristate "MC34704 Regulator Support"
+	depends on REGULATOR
+	depends on MXC_PMIC_MC34704
+	default y
+
+endmenu

@@ -1,0 +1,159 @@
+config FB_MXC
+	tristate "MXC Framebuffer support"
+	depends on FB && ARCH_MXC && (MXC_IPU || ARCH_MX27 || ARCH_MX25)
+	select FB_CFB_FILLRECT
+	select FB_CFB_COPYAREA
+	select FB_CFB_IMAGEBLIT
+	default y
+	help
+	  This is a framebuffer device for the MXC LCD Controller.
+	  See <http://www.linux-fbdev.org/> for information on framebuffer
+	  devices.
+
+	  If you plan to use the LCD display with your MXC system, say
+	  Y here.
+
+choice
+	prompt "Default videomode"
+	depends on FB_MXC
+	default FB_MXC_MODE_SHARP_QVGA if MACH_MX31ADS
+	default FB_MXC_MODE_CRT_VGA if MACH_ARMADILLO500
+	default FB_MXC_MODE_KYOCERA_VGA if MACH_ARMADILLO500FX
+	default FB_MXC_MODE_ET043005DH6 if MACH_ARMADILLO410 || MACH_ARMADILLO440 || MACH_ARMADILLO460
+
+config FB_MXC_MODE_SHARP_QVGA
+	bool "Sharp-QVGA"
+config FB_MXC_MODE_SHARP_CLI
+	bool "Sharp-CLI"
+config FB_MXC_MODE_SHARP_LS037V7DW01_VGA
+	bool "Sharp-LS037V7DW01-VGA"
+config FB_MXC_MODE_NEC_VGA
+	bool "NEC-VGA"
+config FB_MXC_MODE_TV_NTSC
+	bool "TV-NTSC"
+config FB_MXC_MODE_TV_PAL
+	bool "TV-PAL"
+config FB_MXC_MODE_TV_VGA
+	bool "TV-VGA"
+config FB_MXC_MODE_CRT_VGA
+	bool "CRT-VGA"
+config FB_MXC_MODE_CRT_SVGA
+	bool "CRT-SVGA"
+config FB_MXC_MODE_CRT_SVGA56
+	bool "CRT-SVGA56 (for HSP 177MHz)"
+config FB_MXC_MODE_CRT_SVGA60
+	bool "CRT-SVGA60 (for HSP 177MHz)"
+config FB_MXC_MODE_KYOCERA_VGA
+	bool "KYOCERA-VGA"
+config FB_MXC_MODE_CPT_VGA
+	bool "CPT-VGA"
+config FB_MXC_MODE_ET043005DH6
+	bool "ET043005DH6"
+config FB_MXC_MODE_VGG322423
+	bool "VGG322423"
+config FB_MXC_MODE_FG040360DSSWBG03
+	bool "FG040360DSSWBG03"
+config FB_MXC_MODE_FG050720DSSWDGT1
+	bool "FG050720DSSWDGT1"
+config FB_MXC_MODE_FG100410DNCWBGT1
+	bool "FG100410DNCWBGT1"
+config FB_MXC_MODE_AA043MA01
+	bool "AA043MA01"
+
+endchoice
+
+config FB_MXC_DEFAULT_VIDEOMODE
+	string
+	depends on FB_MXC
+	default "Sharp-QVGA" if FB_MXC_MODE_SHARP_QVGA
+	default "Sharp-CLI" if FB_MXC_MODE_SHARP_CLI
+	default "Sharp-LS037V7DW01-VGA" if FB_MXC_MODE_SHARP_LS037V7DW01_VGA
+	default "NEC-VGA" if FB_MXC_MODE_NEC_VGA
+	default "TV-NTSC" if FB_MXC_MODE_TV_NTSC
+	default "TV-PAL" if FB_MXC_MODE_TV_PAL
+	default "TV-VGA" if FB_MXC_MODE_TV_VGA
+	default "CRT-VGA" if FB_MXC_MODE_CRT_VGA
+	default "CRT-SVGA" if FB_MXC_MODE_CRT_SVGA
+	default "CRT-SVGA56" if FB_MXC_MODE_CRT_SVGA56
+	default "CRT-SVGA60" if FB_MXC_MODE_CRT_SVGA60
+	default "KYOCERA-VGA" if FB_MXC_MODE_KYOCERA_VGA
+        default "CPT-VGA" if FB_MXC_MODE_CPT_VGA
+	default "ET043005DH6" if FB_MXC_MODE_ET043005DH6
+	default "VGG322423" if FB_MXC_MODE_VGG322423
+	default "FG040360DSSWBG03" if FB_MXC_MODE_FG040360DSSWBG03
+	default "FG050720DSSWDGT1" if FB_MXC_MODE_FG050720DSSWDGT1
+	default "FG100410DNCWBGT1" if FB_MXC_MODE_FG100410DNCWBGT1
+	default "AA043MA01" if FB_MXC_MODE_AA043MA01
+
+choice
+	prompt "Default bpp"
+	depends on FB_MXC
+	default FB_MXC_BPP_16
+
+config FB_MXC_BPP_16
+	bool "16"
+config FB_MXC_BPP_24
+	bool "24"
+config FB_MXC_BPP_32
+	bool "32"
+
+endchoice
+
+config FB_MXC_DEFAULT_BPP
+	int
+	depends on FB_MXC
+	default 16 if FB_MXC_BPP_16
+	default 24 if FB_MXC_BPP_24
+	default 32 if FB_MXC_BPP_32
+
+config FB_MXC_DEFAULT_STATE
+	int
+	depends on FB_MXC
+	default 1
+
+config FB_MXC_SYNC_PANEL
+	depends on FB_MXC
+	tristate "Synchronous Panel Framebuffer"
+	default y
+
+config FB_MXC_TVOUT
+	tristate "TV Out Encoder"
+	depends on FB_MXC_SYNC_PANEL
+	default n
+
+config FB_MXC_LOW_PWR_DISPLAY
+	bool "Low Power Display Refresh Mode"
+	depends on FB_MXC_SYNC_PANEL && MXC_FB_IRAM
+	default y
+
+config FB_MXC_ASYNC_PANEL
+	depends on FB_MXC
+	bool "Asynchronous Panels"
+	default n
+
+menu "Asynchronous Panel Type"
+	depends on FB_MXC_ASYNC_PANEL && FB_MXC
+
+config FB_MXC_EPSON_PANEL
+    depends on FB_MXC_ASYNC_PANEL
+	default n
+	bool "Epson 176x220 Panel"
+
+endmenu
+
+choice
+	prompt "Async Panel Interface Type"
+	depends on FB_MXC_ASYNC_PANEL && FB_MXC
+	default FB_MXC_ASYNC_PANEL_IFC_16_BIT
+
+config FB_MXC_ASYNC_PANEL_IFC_8_BIT
+	bool "8-bit Parallel Bus Interface"
+
+config FB_MXC_ASYNC_PANEL_IFC_16_BIT
+	bool "16-bit Parallel Bus Interface"
+
+config FB_MXC_ASYNC_PANEL_IFC_SERIAL
+	bool "Serial Bus Interface"
+
+endchoice
+

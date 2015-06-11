@@ -1,0 +1,23 @@
+#
+# i.MX ADC devices
+#
+
+menu "MXC ADC support"
+
+config IMX_ADC
+	tristate "enable ADC driver"
+	depends on ARCH_MXC
+	default n
+	help
+	   This selects the Freescale i.MX on-chip ADC driver.
+
+config USE_INTERNAL_REF_FOR_GENERAL_ADC
+	bool "Use internal reference voltage for general ADC"
+	depends on IMX_ADC
+	default n
+	help
+	  Say Y here to use internal reference voltage (2.5V) for
+	  general ADC. If you say N, use external reference voltage
+	  (ADC_REF).
+
+endmenu
